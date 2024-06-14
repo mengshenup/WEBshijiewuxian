@@ -1,22 +1,31 @@
 body {
     margin: 0;
     overflow: hidden;
+    font-family: Arial, sans-serif;
 }
+
 #game-container {
     width: 100vw;
     height: 100vh;
 }
-#control-panel {
+
+#log-panel {
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+button {
     position: absolute;
     top: 10px;
-    left: 10px;
-    z-index: 10;
-}
-#toggle-controls {
+    right: 10px;
     padding: 10px;
-    background: #007BFF;
+    background-color: #333;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+button:hover {
+    background-color: #555;
 }

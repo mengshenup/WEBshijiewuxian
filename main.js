@@ -1,12 +1,5 @@
-import { initGame } from './game.js';
-
-function logToPanel(message) {
-    const logPanel = document.getElementById('log-panel');
-    const logMessage = document.createElement('div');
-    logMessage.textContent = message;
-    logPanel.appendChild(logMessage);
-    logPanel.scrollTop = logPanel.scrollHeight;
-}
+import { initGame } from './initGame.js';
+import { logToPanel } from './logPanel.js';
 
 logToPanel("4. main.js - main.js 脚本开始执行");
 

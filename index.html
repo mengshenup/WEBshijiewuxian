@@ -13,24 +13,28 @@
 </div>
 <button onclick="toggleControls()">Toggle Controls</button>
 <script>
-        function logToPanel(message) {
-            const logPanel = document.getElementById('log-panel');
-            const logMessage = document.createElement('div');
-            logMessage.textContent = message;
-            logPanel.appendChild(logMessage);
-            logPanel.scrollTop = logPanel.scrollHeight;
-        }
-        logToPanel("2. index.html - index.html 脚本开始执行");
-    </script>
+    function logToPanel(message) {
+        const logPanel = document.getElementById('log-panel');
+        const logMessage = document.createElement('div');
+        logMessage.textContent = message;
+        logPanel.appendChild(logMessage);
+        logPanel.scrollTop = logPanel.scrollHeight;
+    }
+    logToPanel("2. index.html - index.html 脚本开始执行");
+</script>
 <script type="importmap">
-        {
-            "imports": {
-                "three": "./libs/three.js-r165/build/three.module.js",
-                "FBXLoader": "./libs/three.js-r165/examples/jsm/loaders/FBXLoader.js",
-                "RGBELoader": "./libs/three.js-r165/examples/jsm/loaders/RGBELoader.js"
-            }
-        }
-    </script>
+{
+    "imports": {
+        "three": "./libs/three.js-r165/build/three.module.js",
+        "FBXLoader": "./libs/three.js-r165/examples/jsm/loaders/FBXLoader.js",
+        "RGBELoader": "./libs/three.js-r165/examples/jsm/loaders/RGBELoader.js",
+        "logToPanel": "./logPanel.js",
+        "initGame": "./initGame.js",
+        "initControls": "./initControls.js",
+        "initPanel": "./initPanel.js"
+    }
+}
+</script>
 <script type="module" src="./main.js" onload="logToPanel('3. index.html - main.js 加载完成')" onerror="logToPanel('3. index.html - main.js 加载失败')"></script>
 </body>
 </html>

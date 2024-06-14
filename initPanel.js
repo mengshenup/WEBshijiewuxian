@@ -1,4 +1,6 @@
-export function initPanel() {
+import { logToPanel } from './logPanel.js';
+
+function initPanel() {
     const logPanel = document.getElementById('log-panel');
     const logMessage = document.createElement('div');
     logMessage.textContent = "16.1 初始化 panel...";
@@ -12,3 +14,5 @@ export function initPanel() {
     logPanel.appendChild(logMessageInitialized);
     console.log("16.2 panel 初始化完成");
 }
+
+export { initPanel };

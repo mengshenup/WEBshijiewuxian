@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="game-container"></div>
-    <div id="log-panel" style="position: absolute; top: 0; left: 0; width: 300px; height: 100%; background: rgba(0, 0, 0, 0.5); color: white; overflow-y: scroll; padding: 10px;">
-        <div id="log">1. index.html - index.html 加载完成</div>
-    </div>
-    <button onclick="toggleControls()">Toggle Controls</button>
-    <script>
+<div id="game-container"></div>
+<div id="log-panel" style="position: absolute; top: 0; left: 0; width: 300px; height: 100%; background: rgba(0, 0, 0, 0.5); color: white; overflow-y: scroll; padding: 10px;">
+    <div id="log">1. index.html - index.html 加载完成</div>
+</div>
+<button onclick="toggleControls()">Toggle Controls</button>
+<script>
         function logToPanel(message) {
             const logPanel = document.getElementById('log-panel');
             const logMessage = document.createElement('div');
@@ -22,7 +22,7 @@
         }
         logToPanel("2. index.html - index.html 脚本开始执行");
     </script>
-    <script type="importmap">
+<script type="importmap">
         {
             "imports": {
                 "three": "./libs/three.js-r165/build/three.module.js",
@@ -31,6 +31,6 @@
             }
         }
     </script>
-    <script type="module" src="./main.js" onload="logToPanel('3. index.html - main.js 加载完成')" onerror="logToPanel('3. index.html - main.js 加载失败')"></script>
+<script type="module" src="./main.js" onload="logToPanel('3. index.html - main.js 加载完成')" onerror="logToPanel('3. index.html - main.js 加载失败')"></script>
 </body>
 </html>

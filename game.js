@@ -1,95 +1,76 @@
-import * as THREE from 'three';
-import { FBXLoader } from 'FBXLoader';
-import { RGBELoader } from 'RGBELoader';
+// 导入Three.js库和FBXLoader
+import * as THREE from './libs/three.js-r165/build/three.module.js';
+import { FBXLoader } from './libs/three.js-r165/examples/jsm/loaders/FBXLoader.js';
+import { RGBELoader } from './libs/three.js-r165/examples/jsm/loaders/RGBELoader.js';
+import { logToPanel } from './logPanel.js';
 
-function logToPanel(message) {
-    const logPanel = document.getElementById('log-panel');
-    const logMessage = document.createElement('div');
-    logMessage.textContent = message;
-    logPanel.appendChild(logMessage);
-    logPanel.scrollTop = logPanel.scrollHeight;
-}
+// 定义默认纹理路径
+const defaultTexturePath = './assets/default_texture.png';
 
-logToPanel("game.js - 1. game.js 脚本开始执行");
-
-export function initGame() {
-    logToPanel("game.js - 2. initGame 函数开始执行");
-
-    // 初始化场景
+// 初始化游戏
+async function initGame() {
+    // 创建场景
     const scene = new THREE.Scene();
-    logToPanel("game.js - 3. 场景已创建");
-
-    // 初始化相机
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 2, 5);
-    logToPanel("game.js - 4. 相机已创建");
-
-    // 初始化渲染器
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.getElementById('game-container').appendChild(renderer.domElement);
-    logToPanel("game.js - 5. 渲染器已创建");
-
-    // 添加环境光
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    scene.add(ambientLight);
-    logToPanel("game.js - 6. 环境光已添加");
-
-    // 添加点光源
-    const pointLight = new THREE.PointLight(0xffffff, 1);
-    pointLight.position.set(5, 5, 5);
-    scene.add(pointLight);
-    logToPanel("game.js - 7. 点光源已添加");
+    logToPanel('game.js - 2. 场景已创建');
 
     // 加载HDR天空盒
     const rgbeLoader = new RGBELoader();
-    rgbeLoader.load('./assets/skybox.hdr', function(texture) {
+    rgbeLoader.load('./assets/royal_esplanade_1k.hdr', function (texture) {
         texture.mapping = THREE.EquirectangularReflectionMapping;
         scene.background = texture;
         scene.environment = texture;
-        logToPanel("game.js - 11. HDR 天空盒加载完成");
+        logToPanel('game.js - 11. HDR 天空盒加载完成');
     });
 
-    // 加载FBX模型
+    // 加载模型
     const fbxLoader = new FBXLoader();
-    
     const models = [
-        'terrain.fbx',
-        'cat.fbx',
-        'tree.fbx',
-        'house.fbx',
-        'car.fbx',
-        'rock.fbx',
-        'bench.fbx',
-        'lamp.fbx',
-        'flower.fbx'
+        'rock.fbx', 'bench.fbx', 'flower.fbx', 'cat.fbx',
+        'lamp.fbx', 'terrain.fbx', 'tree.fbx', 'house.fbx', 'car.fbx'
     ];
 
-    models.forEach((model, index) => {
-        fbxLoader.load(`./assets/${model}`, function(object) {
-            scene.add(object);
-            logToPanel(`game.js - ${12 + index}. ${model} 加载完成`);
-        }, undefined, function(error) {
-            logToPanel(`game.js - 加载 ${model} 出错: ${error.message}`);
-            console.error(`game.js - 加载 ${model} 出错:`, error);
-        });
-    });
+    for (let i = 0; i < models.length; i++) {
+        loadModel(fbxLoader, scene, `./assets/${models[i]}`);
+    }
 
     // 渲染循环
+    const renderer = new THREE.WebGLRenderer();
+    document.body.appendChild(renderer.domElement);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
     function animate() {
         requestAnimationFrame(animate);
         renderer.render(scene, camera);
     }
 
+    // 启动动画循环
     animate();
-    logToPanel("game.js - 17. 动画启动");
+    logToPanel('game.js - 17. 动画启动');
 }
-const textureLoader = new THREE.TextureLoader();
-const texture = textureLoader.load('./assets/your_texture.png', function(texture) {
-    // 纹理加载成功
-    logToPanel("game.js - 纹理加载成功");
-}, undefined, function(error) {
-    // 纹理加载失败
-    logToPanel("game.js - 纹理加载失败: " + error.message);
-    console.error("game.js - 纹理加载失败:", error);
-});
+
+// 加载模型函数
+function loadModel(fbxLoader, scene, modelPath) {
+    fbxLoader.load(modelPath, function (object) {
+        // 遍历模型的材质并设置默认纹理
+        object.traverse(function (child) {
+            if (child.isMesh) {
+                if (!child.material.map) {
+                    child.material.map = new THREE.TextureLoader().load(defaultTexturePath);
+                    logToPanel(`loadModels.js - 模型 ${modelPath} 的材质 map 没有纹理，已设置为默认纹理`);
+                }
+                if (!child.material.normalMap) {
+                    child.material.normalMap = new THREE.TextureLoader().load(defaultTexturePath);
+                    logToPanel(`loadModels.js - 模型 ${modelPath} 的材质 normalMap 没有纹理，已设置为默认纹理`);
+                }
+            }
+        });
+        scene.add(object);
+        logToPanel(`loadModels.js - ${modelPath} 加载完成`);
+    }, undefined, function (error) {
+        logToPanel(`loadModels.js - 加载 ${modelPath} 出错: ${error.message}`);
+        console.error(`加载 ${modelPath} 出错:`, error);
+    });
+}
+
+// 导出initGame函数
+export { initGame };
